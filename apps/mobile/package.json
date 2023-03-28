@@ -1,5 +1,5 @@
 {
-  "name": "sudoko",
+  "name": "@sudoku/mobile",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,6 +7,7 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "dev": "react-native start",
     "test": "jest"
   },
   "dependencies": {

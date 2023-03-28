@@ -1,9 +1,36 @@
 {
-  "$schema": "https://turbo.build/schema.json",
+  "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
+    "db-generate": {
+      "inputs": ["prisma/schema.prisma"],
+      "cache": false
+    },
+    "db-push": {
+      "inputs": ["prisma/schema.prisma"],
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["^db-generate"],
+      "cache": false
+    },
     "build": {
+      "dependsOn": ["^build", "^db-generate"],
       "outputs": [".next/**"]
     },
-    "lint": {}
-  }
+    "lint": {
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    },
+    "type-check": {
+      "dependsOn": ["^db-generate"],
+      "cache": false
+    }
+  },
+  "globalEnv": [
+    "DATABASE_URL",
+    "REACT_APP_SUPABASE_URL",
+    "REACT_APP_SUPABASE_KEY"
+  ]
 }

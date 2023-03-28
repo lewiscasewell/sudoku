@@ -1,0 +1,21 @@
+{
+  "name": "@sudoku/db",
+  "version": "0.1.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "scripts": {
+    "dev": "prisma studio --port 5556",
+    "db-push": "prisma db push",
+    "db-generate": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.10",
+    "dotenv-cli": "^7.1.0",
+    "prisma": "^4.11.0",
+    "typescript": "^5.0.2"
+  }
+}
