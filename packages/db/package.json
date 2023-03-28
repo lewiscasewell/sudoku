@@ -5,9 +5,10 @@
   "types": "./index.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "prisma studio --port 5556",
-    "db-push": "prisma db push",
-    "db-generate": "prisma generate"
+    "with-env": "dotenv -e ../../.env --",
+    "dev": "yarn with-env prisma studio --port 5556",
+    "db-push": "yarn with-env prisma db push",
+    "db-generate": "yarn with-env prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0"
