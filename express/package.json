@@ -9,10 +9,14 @@
     "dev": "nodemon index.ts"
   },
   "dependencies": {
+    "@prisma/client": "^4.12.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "http-status": "^1.6.2",
     "kysely": "^0.24.2",
+    "morgan": "^1.10.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
@@ -20,6 +24,7 @@
     "@types/node": "^18.15.11",
     "eslint": "^8.37.0",
     "nodemon": "^2.0.22",
+    "prisma": "^4.12.0",
     "typescript": "^5.0.3"
   }
 }

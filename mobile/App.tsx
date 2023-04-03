@@ -58,8 +58,18 @@ const HomeStackRoot = () => (
     />
   </HomeStack.Navigator>
 );
+
+const getMessages = async () => {
+  const response = await fetch('http://localhost:8080');
+
+  console.log('response', response);
+
+  return response.json();
+};
+
 function App(): JSX.Element {
   const [userSession, setSession] = useState<Session | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   useEffect(() => {
     supabase.auth.getSession().then(({data: {session}}) => {
       setSession(session);
@@ -68,7 +78,13 @@ function App(): JSX.Element {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+
+    getMessages().then(response => {
+      setMessage(response.message);
+    });
   }, []);
+
+  console.log('message', message);
 
   return (
     <DatabaseProvider database={db}>
