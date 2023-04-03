@@ -128,33 +128,40 @@ export const useSudokuStore = create(
         const splitSudoku = sudokuPuzzle.split('');
         const chunkedSudoku = R.chunk(splitSudoku, 9);
         const chunkedSolution = R.chunk(sudokuSolution.split(''), 9);
-        chunkedSudoku.forEach((i, index) => {
-          console.log('hi');
-          i.forEach((j, idx) =>
-            set(
-              produce(state => {
-                state.sudokus[sudokuId].cells[`${index}-${idx}`] = {
-                  rIndex: index,
-                  cIndex: idx,
-                  current: j,
-                  original: j,
-                  notes: {
-                    '1': false,
-                    '2': false,
-                    '3': false,
-                    '4': false,
-                    '5': false,
-                    '6': false,
-                    '7': false,
-                    '8': false,
-                    '9': false,
-                  },
-                  answer: chunkedSolution[index][idx],
-                };
-              }),
-            ),
-          );
-        });
+
+        const cells: Record<string, SudokuCell> = chunkedSudoku.reduce(
+          (acc, curr, index) => {
+            const row = curr.reduce((acc, curr, idx) => {
+              acc[`${index}-${idx}`] = {
+                rIndex: index,
+                cIndex: idx,
+                current: curr,
+                original: curr,
+                notes: {
+                  '1': false,
+                  '2': false,
+                  '3': false,
+                  '4': false,
+                  '5': false,
+                  '6': false,
+                  '7': false,
+                  '8': false,
+                  '9': false,
+                },
+                answer: chunkedSolution[index][idx],
+              };
+              return acc as Record<string, SudokuCell>;
+            }, {} as Record<string, SudokuCell>);
+            return {...acc, ...row};
+          },
+          {},
+        );
+
+        set(
+          produce(state => {
+            state.sudokus[sudokuId].cells = cells;
+          }),
+        );
       },
       resetBoard: ({sudokuId}) => {
         set(state => {
@@ -223,9 +230,6 @@ export const useSudokuStore = create(
     {
       storage: zustandStorage,
       name: 'sudoku-store',
-      //   onRehydrateStorage: state => console.log(state),
-      //   serialize: state => JSON.stringify(state),
-      //   deserialize: state => JSON.parse(state),
     },
   ),
 );
@@ -255,14 +259,7 @@ const Timer: React.FC<{
     String(num).padStart(places, '0');
 
   return (
-    <Text
-      style={{
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 16,
-        width: 90,
-        textAlign: 'center',
-      }}>
+    <Text style={styles.timer}>
       {`${zeroPad(hours, 2)}:${zeroPad(minutes, 2)}:${zeroPad(seconds, 2)}`}
     </Text>
   );
@@ -513,10 +510,10 @@ const SudokuDetailScreen = ({sudoku}: Props) => {
                               (activeCell.number ===
                                 sudokuStore.sudokus[sudoku.id]?.cells[
                                   `${rIndex}-${cellIndex}`
-                                ].current &&
+                                ]?.current &&
                                 sudokuStore.sudokus[sudoku.id]?.cells[
                                   `${rIndex}-${cellIndex}`
-                                ].current !== '.')
+                                ]?.current !== '.')
                                 ? '#0c4a6e'
                                 : cellIndex === activeCell.cellIndex
                                 ? '#0d0d0d'
@@ -797,6 +794,13 @@ const styles = StyleSheet.create({
   addComment: {
     marginHorizontal: 20,
     marginBottom: 10,
+  },
+  timer: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    width: 90,
+    textAlign: 'center',
   },
 });
 
